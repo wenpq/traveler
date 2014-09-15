@@ -96,6 +96,8 @@ require('./routes/form')(app);
 
 require('./routes/traveler')(app);
 
+require('./routes/router')(app);
+
 require('./routes/user')(app);
 
 require('./routes/profile')(app);

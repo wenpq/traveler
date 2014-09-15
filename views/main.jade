@@ -13,13 +13,17 @@ block content
   .container-fluid
     .btn-toolbar
       .btn-group
-        a.btn.btn-primary#new(href='/forms/new', target='_blank')
+        a.btn.btn-primary#newform(href='/forms/new', target='_blank')
           i.fa.fa-file-o.fa-lg
           | &nbsp;New Form
       .btn-group
-        a.btn.btn-primary#new(href='/currenttravelers/', target='_blank')
+        a.btn.btn-primary#currenttravelers(href='/currenttravelers/', target='_blank')
           i.fa.fa-list.fa-lg
           | &nbsp;All travelers
+      .btn-group
+        a.btn.btn-primary#newrouter(href='/routers/new', target='_blank')
+          i.fa.fa-dashboard.fa-lg
+          | &nbsp;New Router
       .btn-group
         button.btn.btn-primary#reload
           i.fa.fa-refresh.fa-lg
