@@ -28,6 +28,7 @@ var Form = require('./model/form.js').Form;
 var Traveler = require('./model/traveler.js').Traveler;
 var TravelerData = require('./model/traveler.js').TravelerData;
 var TravelerComment = require('./model/traveler.js').TravelerComment;
+var Router = require('./model/router.js').Router;
 
 mongoose.connect('mongodb://localhost/traveler');
 

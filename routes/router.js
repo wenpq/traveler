@@ -8,8 +8,7 @@ var mongoose = require('mongoose');
 // var underscore = require('underscore');
 
 
-// var Form = mongoose.model('Form');
-// var FormFile = mongoose.model('FormFile');
+var Router = mongoose.model('Router');
 var User = mongoose.model('User');
 
 /*function addUserFromAD(req, res, form) {
@@ -163,8 +162,50 @@ access := -1 // no access
 }*/
 
 
+function filterBody(strings) {
+  return function (req, res, next) {
+    var k, found = false;
+    for (k in req.body) {
+      if (req.body.hasOwnProperty(k)) {
+        if (strings.indexOf(k) !== -1) {
+          found = true;
+        } else {
+          req.body[k] = null;
+        }
+      }
+    }
+    if (found) {
+      next();
+    } else {
+      return res.send(400, 'cannot find required information in body');
+    }
+  };
+}
+
 module.exports = function (app) {
   app.get('/routers/new', auth.ensureAuthenticated, function (req, res) {
     return res.render('newrouter');
+  });
+
+  app.post('/routers/', auth.ensureAuthenticated, filterBody(['title']), function (req, res) {
+    var router = new Router({
+      title: req.body.title,
+      status: 0,
+      createdBy: req.session.userid,
+      createdOn: Date.now(),
+      sharedWith: [],
+      travelers: []
+    });
+
+    router.save(function (err, doc) {
+      if (err) {
+        console.error(err.msg);
+        return res.send(500, err.msg);
+      }
+      console.log('new router ' + doc.id + ' created');
+      var url = req.protocol + '://' + req.get('host') + '/router/' + doc.id + '/';
+      res.set('Location', url);
+      return res.send(201, 'You can see the new router at ' + url);
+    });
   });
 };
