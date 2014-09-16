@@ -183,8 +183,14 @@ function filterBody(strings) {
 }
 
 module.exports = function (app) {
+
+  app.get('/routers/', auth.ensureAuthenticated, function (req, res) {
+    res.render('routers');
+  });
+
+
   app.get('/routers/new', auth.ensureAuthenticated, function (req, res) {
-    return res.render('newrouter');
+    res.render('newrouter');
   });
 
   app.post('/routers/', auth.ensureAuthenticated, filterBody(['title']), function (req, res) {

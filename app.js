@@ -3,8 +3,8 @@
  */
 
 var express = require('express'),
-  routes = require('./routes'),
-  about = require('./routes/about'),
+  // routes = require('./routes'),
+  // about = require('./routes/about'),
   http = require('http'),
   https = require('https'),
   fs = require('fs'),
@@ -105,12 +105,26 @@ require('./routes/profile')(app);
 
 require('./routes/device')(app);
 
-app.get('/about', about.index);
+require('./routes/about')(app);
+
 app.get('/api', function (req, res) {
   res.render('api');
 });
-app.get('/', auth.ensureAuthenticated, routes.main);
-app.get('/logout', routes.logout);
+
+app.get('/', auth.ensureAuthenticated, function (req, res) {
+  res.send(200, 'the main page is under development');
+});
+
+app.get('/logout', function (req, res) {
+  if (req.session) {
+    req.session.destroy(function (err) {
+      if (err) {
+        console.error(err);
+      }
+    });
+  }
+  res.redirect('https://liud-dev.nscl.msu.edu/cas/logout');
+});
 
 app.get('/apis', function (req, res) {
   res.redirect('https://' + req.host + ':' + api.get('port') + req.originalUrl);

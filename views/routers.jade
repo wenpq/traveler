@@ -1,0 +1,122 @@
+extends layout
+
+block head
+  title FRIB Traveler
+  meta(name='viewport', content='width=device-width, initial-scale=1.0')
+  link(rel='stylesheet', href='/bootstrap/css/bootstrap.css')
+  link(rel='stylesheet', href='/bootstrap/css/bootstrap-responsive.css')
+  link(rel='stylesheet', href='/datatables/css/dataTables.bootstrap.css')
+  link(rel='stylesheet', href='/font-awesome-4.0.3/css/font-awesome.css')
+  link(rel='stylesheet', href='/stylesheets/style.css')
+
+block content
+  .navbar.navbar-inverse.navbar-fixed-top
+    .navbar-inner
+      .container-fluid
+        button.btn.btn-navbar(type='button', data-toggle='collapse', data-target='.nav-collapse')
+          span.icon-bar
+          span.icon-bar
+          span.icon-bar
+        a.brand(href='http://www.frib.msu.edu/', target='_blank') FRIB
+        .nav-collapse.collapse
+          ul.nav
+            li
+              a(href='/travelers/') Traveler
+            li.active
+              a(href='/routers') Router
+            li
+              a(href='https://controls.frib.msu.edu/controlshelp/', target='_blank') Trouble report
+            li
+              a(href='/logout') Logout
+  .container-fluid
+    .btn-toolbar
+      .btn-group
+        a.btn.btn-primary#newrouter(href='/routers/new', target='_blank')
+          i.fa.fa-dashboard.fa-lg
+          | &nbsp;New Router
+      .btn-group
+        button.btn.btn-primary#reload
+          i.fa.fa-refresh.fa-lg
+          | &nbsp;Reload
+      .btn-group.dropdown
+        a#meta.btn.btn-info.dropdown-toggle(data-toggle='dropdown')
+          i.fa.fa-gears.fa-lg
+          | &nbsp;Meta
+          span.caret
+        ul.dropdown-menu
+          li#devices
+            a(href='/devices/', target='_blank') Devices
+      .btn-group
+        a.btn(href='/profile', target='_blank')
+          i.fa.fa-user.fa-lg
+          | &nbsp;Profile
+      if (locals.roles !== undefined && locals.roles.indexOf('admin') !== -1)
+        .btn-group
+          a.btn(href='/users', target='_blank')
+            i.fa.fa-users.fa-lg
+            | &nbsp;Users
+      .btn-group
+        a.btn(href='/about', target='_blank')
+          i.fa.fa-info.fa-lg
+          |&nbsp;About
+    #message
+    #modal.modal.hide.fade(tabindex='-1',role='dialog',data-backdrop='static',aria-labelledby='modalLabel',aria-hidden='true')
+      .modal-header
+        h3#modalLabel
+      .modal-body
+      .modal-footer
+    .tabbable.tabs-left
+      ul.nav.nav-tabs
+        li.active
+          a(href='#routers', data-toggle='tab') My routers
+        li
+          a(href='#sharedrouters', data-toggle='tab') Shared routers
+        li
+          a(href='#initrouters', data-toggle='tab') Initial routers
+        li
+          a(href='#activerouters', data-toggle='tab') Active routers
+        li
+          a(href='#completerouters', data-toggle='tab') Complete routers
+        li
+          a(href='#abortedrouters', data-toggle='tab') Aborted travelers
+
+      .tab-content
+        #routers.tab-pane.active
+          .btn-toolbar
+            .btn-group
+              button.btn.btn-primary#complete(data-toggle='tooltip', title='complete selected routers')
+                i.fa.fa-trophy.fa-lg
+                | &nbsp;Complete
+            .btn-group
+              button.btn.btn-primary#abort(data-toggle='tooltip', title='abort selected travelers')
+                i.fa.fa-trash-o.fa-lg
+                | &nbsp;Abort
+          table#router-table.table.table-bordered.table-hover
+        #sharedrouters.tab-pane
+          table#shared-router-table.table.table-bordered.table-hover
+        #initrouters.tab-pane
+          table#init-router-table.table.table-bordered.table-hover
+        #activerouters.tab-pane
+          table#active-router-table.table.table-bordered.table-hover
+        #completerouters.tab-pane
+          table#complete-router-table.table.table-bordered.table-hover
+        #abortedrouters.tab-pane
+          .btn-toolbar
+            .btn-group
+              button.btn.btn-primary#dearchive(data-toggle='tooltip', title='rework selected routers')
+                i.fa.fa-tasks.fa-lg
+                | &nbsp;Rework
+          table#aborted-router-table.table.table-bordered.table-hover
+block js
+  script(type='text/javascript', src='/jquery/jquery-1.9.1.js')
+  script(type='text/javascript', src='/datatables/js/jquery.dataTables.js')
+  script(type='text/javascript', src='/bootstrap/js/bootstrap.js')
+  script(type='text/javascript', src='/datatables/js/ZeroClipboard.js')
+  script(type='text/javascript', src='/datatables/js/TableTools.js')
+  script(type='text/javascript', src='/datatables/js/dataTables.bootstrap.js')
+  script(type='text/javascript', src='/jquery/jquery.history.js')
+  script(type='text/javascript', src='/dependencies/moment.js')
+  script(type='text/javascript', src='/javascripts/table.js')
+  // script(type='text/javascript', src='/javascripts/main.js')
+
+
