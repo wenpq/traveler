@@ -17,7 +17,7 @@ var sharedWithUser = new Schema({
 
 var task = new Schema({
   sequence: Number,
-  traveler: ObjectId,
+  traveler: {type: ObjectId, ref: 'Traveler'},
   dependencies: [ObjectId],
   title: String
 });
@@ -32,6 +32,7 @@ status := 0 // initialized
 
 var router = new Schema({
   title: String,
+  description: String,
   status: Number,
   createdBy: String,
   createdOn: Date,
@@ -39,7 +40,7 @@ var router = new Schema({
   updatedOn: Date,
   sharedWith: [sharedWithUser],
   tasks: [task],
-  referenceRouter: ObjectId
+  referenceRouter: {type: ObjectId, ref: 'Router'}
 });
 
 

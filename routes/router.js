@@ -188,6 +188,18 @@ module.exports = function (app) {
     res.render('routers');
   });
 
+  app.get('/routers/json', auth.ensureAuthenticated, function (req, res) {
+    Router.find({
+      createdBy: req.session.userid
+    }, 'title description status devices sharedWith clonedBy createdOn deadline updatedOn updatedBy tasks').lean().exec(function (err, docs) {
+      if (err) {
+        console.error(err.msg);
+        return res.send(500, err.msg);
+      }
+      return res.json(200, docs);
+    });
+  });
+
 
   app.get('/routers/new', auth.ensureAuthenticated, function (req, res) {
     res.render('newrouter');
