@@ -91,19 +91,6 @@ function addExternalData(oTable, url) {
   }).always();
 }
 
-function formatTravelerStatus(s) {
-  var status = {
-    '1': 'active',
-    '1.5': 'submitted for completion',
-    '2': 'completed',
-    '3': 'frozen',
-    '0': 'initialized'
-  };
-  if (status['' + s]) {
-    return status['' + s];
-  }
-  return 'unknown';
-}
 $(function () {
   $(document).ajaxError(function (event, jqXHR, settings, exception) {
     if (jqXHR.status == 401) {
