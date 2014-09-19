@@ -162,6 +162,19 @@ function formatTravelerStatus(s) {
   return 'unknown';
 }
 
+function formatRouterStatus(s) {
+  var status = {
+    '0': 'initialized',
+    '1': 'active',
+    '2': 'completed',
+    '3': 'aborted'
+  };
+  if (status[s.toString()]) {
+    return status[s.toString()];
+  }
+  return 'unknown';
+}
+
 $.fn.dataTableExt.oApi.fnAddDataAndDisplay = function (oSettings, aData) {
   /* Add the data */
   var iAdded = this.oApi._fnAddData(oSettings, aData);
@@ -320,10 +333,6 @@ var travelerLinkColumn = {
     }
     return 'unknown';
   },
-  // mData: '_id',
-  // mRender: function(data, type, full) {
-  //   return '<a href="/travelers/' + data + '/" target="_blank" data-toggle="tooltip" title="go to the traveler"><i class="fa fa-edit fa-lg"></i></a>';
-  // },
   bSortable: false
 };
 
@@ -420,6 +429,68 @@ var statusColumn = {
     return formatTravelerStatus(data);
   },
   bFilter: true
+};
+
+/*router columns*/
+var routerConfigLinkColumn = {
+  sTitle: '',
+  mData: '_id',
+  mRender: function (data, type, full) {
+    return '<a href="/routers/' + data + '/config" target="_blank" data-toggle="tooltip" title="config the router"><i class="fa fa-gear fa-lg"></i></a>';
+  },
+  bSortable: false
+};
+
+var routerShareLinkColumn = {
+  sTitle: '',
+  mData: '_id',
+  mRender: function (data, type, full) {
+    return '<a href="/routers/' + data + '/share/" target="_blank" data-toggle="tooltip" title="share the router"><i class="fa fa-users fa-lg"></i></a>';
+  },
+  bSortable: false
+};
+
+var routerLinkColumn = {
+  sTitle: '',
+  mData: '_id',
+  mRender: function (data, type, full) {
+    return '<a href="/routers/' + data + '/" target="_blank" data-toggle="tooltip" title="go to the router"><i class="fa fa-edit fa-lg"></i></a>';
+  },
+  bSortable: false
+};
+
+var routerStatusColumn = {
+  sTitle: 'Status',
+  mData: 'status',
+  mRender: function (data, type, full) {
+    return formatRouterStatus(data);
+  },
+  bFilter: true
+};
+
+var routerProgressColumn = {
+  sTitle: 'Progress',
+  bSortable: true,
+  sType: 'numeric',
+  mData: function (source, type, val) {
+    if (!source.hasOwnProperty('tasks') || source.tasks.length === 0) {
+      if (type === 'sort') {
+        return 0;
+      }
+      return '';
+    }
+    if (!source.hasOwnProperty('finishedTasks')) {
+      if (type === 'sort') {
+        return 0;
+      }
+      return 'unknown';
+    }
+    var percentage = Math.floor((source.finishedTasks.length / source.tasks.length) * 100);
+    if (type === 'sort') {
+      return percentage;
+    }
+    return '<div class="progress" style="margin-bottom: 0; width: 100px; background: #FFFF00; position: relative;"><div class="bar" style="width:' + percentage + '%;"></div><span style="position: absolute; text-align: center; width: 100%; z-index: 100; color: #000000; display: block;">' + source.finishedTasks.length + '/' + source.tasks.length + '</span></div>';
+  }
 };
 
 

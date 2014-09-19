@@ -191,15 +191,15 @@ $(function () {
   });
   initTable(sharedFormTable, '/sharedforms/json');*/
 
-  var routerAoColumns = [selectColumn, routerConfigLinkColumn, routerShareLinkColumn, routerLinkColumn, titleColumn, statusColumn, sharedWithColumn, createdOnColumn, updatedByColumn, updatedOnColumn, progressColumn];
-  fnAddFilterFoot('#router-table', travelerAoColumns);
+  var routerAoColumns = [selectColumn, routerConfigLinkColumn, routerShareLinkColumn, routerLinkColumn, titleColumn, routerStatusColumn, sharedWithColumn, createdOnColumn, updatedByColumn, updatedOnColumn, routerProgressColumn];
+  fnAddFilterFoot('#router-table', routerAoColumns);
   routerTable = $('#router-table').dataTable({
     aaData: [],
     // bAutoWidth: false,
     aoColumns: routerAoColumns,
     aaSorting: [
-      [9, 'desc'],
-      [12, 'desc']
+      [7, 'desc'],
+      [9, 'desc']
     ],
     sDom: sDom,
     oTableTools: oTableTools

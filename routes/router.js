@@ -226,4 +226,8 @@ module.exports = function (app) {
       return res.send(201, 'You can see the new router at ' + url);
     });
   });
+
+  app.get('/routers/:id', auth.ensureAuthenticated, function (req, res) {
+
+  });
 };
