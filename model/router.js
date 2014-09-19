@@ -15,12 +15,12 @@ var sharedWithUser = new Schema({
 // dependencies are the tasks that this task depends on.
 // This task cannot be started before the dependencies are finished.
 
-var task = new Schema({
-  sequence: Number,
-  traveler: {type: ObjectId, ref: 'Traveler'},
-  dependencies: [ObjectId],
-  title: String
-});
+// var task = new Schema({
+//   sequence: Number,
+//   traveler: {type: ObjectId, ref: 'Traveler'},
+//   dependencies: [ObjectId],
+//   title: String
+// });
 
 
 /*******
@@ -39,7 +39,8 @@ var router = new Schema({
   updatedBy: String,
   updatedOn: Date,
   sharedWith: [sharedWithUser],
-  tasks: [task],
+  tasks: [{type: ObjectId, ref: String}],
+  finishedTasks: [{type: ObjectId, ref: String}],
   referenceRouter: {type: ObjectId, ref: 'Router'}
 });
 
