@@ -68,7 +68,7 @@ var User = mongoose.model('User');
   });
 }*/
 
-/*function canWrite(req, doc) {
+function canWrite(req, doc) {
   if (doc.createdBy === req.session.userid) {
     return true;
   }
@@ -76,7 +76,7 @@ var User = mongoose.model('User');
     return true;
   }
   return false;
-}*/
+}
 
 /*function canRead(req, doc) {
   if (doc.createdBy === req.session.userid) {
@@ -94,7 +94,7 @@ access := -1 // no access
         | 1  // write
 *****/
 
-/*function getAccess(req, doc) {
+function getAccess(req, doc) {
   if (doc.createdBy === req.session.userid) {
     return 1;
   }
@@ -102,7 +102,7 @@ access := -1 // no access
     return doc.sharedWith.id(req.session.userid).access;
   }
   return -1;
-}*/
+}
 
 /*function getSharedWith(sharedWith, name) {
   var i;
@@ -227,7 +227,33 @@ module.exports = function (app) {
     });
   });
 
-  app.get('/routers/:id', auth.ensureAuthenticated, function (req, res) {
-
+  app.get('/routers/:id/', auth.ensureAuthenticated, function (req, res) {
+    Router.findById(req.params.id, function (err, doc) {
+      if (err) {
+        console.error(err.msg);
+        return res.send(500, err.msg);
+      }
+      if (!doc) {
+        return res.send(410, 'gone');
+      }
+      if (canWrite(req, doc)) {
+        return res.render('router', doc);
+      }
+      return res.redirect('/routers/' + req.params.id + '/view');
+    });
   });
+
+  app.get('/routers/:id/view', auth.ensureAuthenticated, function (req, res) {
+    Router.findById(req.params.id, function (err, doc) {
+      if (err) {
+        console.error(err.msg);
+        return res.send(500, err.msg);
+      }
+      if (!doc) {
+        return res.send(410, 'gone');
+      }
+      return res.render('routerviewer', doc);
+    });
+  });
+
 };
