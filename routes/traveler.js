@@ -1,3 +1,5 @@
+/*jslint es5:true*/
+
 var ad = require('../config/ad.json');
 var ldapClient = require('../lib/ldap-client');
 
