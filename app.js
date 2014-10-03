@@ -1,3 +1,5 @@
+/*jslint es5:true*/
+
 /**
  * Module dependencies.
  */
