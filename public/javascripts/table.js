@@ -1,22 +1,12 @@
-// table variables and functions
+/*global moment: false*/
 
-/*global moment:false*/
+function formatDate(date) {
+  return date ? moment(date).fromNow() : '';
+}
 
-
-var oTableTools = {
-  "sSwfPath": "/datatables/swf/copy_csv_xls_pdf.swf",
-  "aButtons": [
-    "copy",
-    "print", {
-      "sExtends": "collection",
-      "sButtonText": 'Save <span class="caret" />',
-      "aButtons": ["csv", "xls", "pdf"]
-    }
-  ]
-};
-
-var sDom = "<'row-fluid'<'span6'<'control-group'T>>><'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>";
-
+function formatDateLong(date) {
+  return date ? moment(date).format('YYYY-MM-DD HH:mm:ss') : '';
+}
 
 function selectEvent() {
   $('tbody').on('click', 'input.select-row', function (e) {
@@ -37,14 +27,6 @@ function filterEvent() {
   });
 }
 
-
-function formatDate(date) {
-  return date ? moment(date).fromNow() : '';
-}
-
-function formatDateLong(date) {
-  return date ? moment(date).format('YYYY-MM-DD HH:mm:ss') : '';
-}
 
 function dateColumn(title, key) {
   return {
@@ -91,7 +73,6 @@ function fnGetSelected(oTableLocal, selectedClass) {
   var aReturn = [];
   var aTrs = oTableLocal.fnGetNodes();
   var i;
-
   for (i = 0; i < aTrs.length; i++) {
     if ($(aTrs[i]).hasClass(selectedClass)) {
       aReturn.push(aTrs[i]);
@@ -103,7 +84,6 @@ function fnGetSelected(oTableLocal, selectedClass) {
 function fnDeselect(oTableLocal, selectedClass, checkboxClass) {
   var aTrs = oTableLocal.fnGetNodes();
   var i;
-
   for (i = 0; i < aTrs.length; i++) {
     if ($(aTrs[i]).hasClass(selectedClass)) {
       $(aTrs[i]).removeClass(selectedClass);
@@ -140,7 +120,7 @@ function fnAddFilterFoot(sTable, aoColumns) {
   var tr = $('<tr role="row">');
   aoColumns.forEach(function (c) {
     if (c.bFilter) {
-      tr.append('<th><input type="text" placeholder="' + c.sTitle + '" class="input-medium" autocomplete="off"></th>');
+      tr.append('<th><input type="text" placeholder="' + c.sTitle + '" style="width:80%;" autocomplete="off"></th>');
     } else {
       tr.append('<th></th>');
     }
@@ -189,6 +169,7 @@ $.fn.dataTableExt.oApi.fnAddDataAndDisplay = function (oSettings, aData) {
   /* Find it's position in the table */
   var iPos = -1;
   var i, iLen;
+
   for (i = 0, iLen = oSettings.aiDisplay.length; i < iLen; i++) {
     if (oSettings.aoData[oSettings.aiDisplay[i]].nTr === nAdded) {
       iPos = i;
@@ -234,7 +215,6 @@ $.fn.dataTableExt.oApi.fnDisplayRow = function (oSettings, nRow) {
   this.oApi._fnDraw(oSettings);
 };
 
-
 var selectColumn = {
   sTitle: '',
   sDefaultContent: '<label class="checkbox"><input type="checkbox" class="select-row"></label>',
@@ -247,34 +227,6 @@ var idColumn = {
   mData: '_id',
   bVisible: false
 };
-
-var descriptionColumn = {
-  sTitle: 'Description',
-  mData: 'description',
-  sDefaultContent: '',
-  bFilter: true
-};
-
-var modifiedOnColumn = dateColumn('Modified', 'dateModified');
-
-var modifiedByColumn = {
-  sTitle: 'Modified by',
-  mData: 'modifiedBy',
-  sDefaultContent: '',
-  bFilter: true
-};
-
-var createdOnColumn = dateColumn('Created', 'createdOn');
-var createdByColumn = personColumn('Created by', 'createdBy');
-
-var clonedByColumn = personColumn('Cloned by', 'clonedBy');
-
-var updatedOnColumn = dateColumn('Updated', 'updatedOn');
-var updatedByColumn = personColumn('Updated by', 'updatedBy');
-
-var deadlineColumn = dateColumn('Deadline', 'deadline');
-
-/*form columns*/
 
 var formLinkColumn = {
   sTitle: '',
@@ -293,6 +245,16 @@ var formShareLinkColumn = {
   },
   bSortable: false
 };
+
+var createdOnColumn = dateColumn('Created', 'createdOn');
+var createdByColumn = personColumn('Created by', 'createdBy');
+
+var clonedByColumn = personColumn('Cloned by', 'clonedBy');
+
+var updatedOnColumn = dateColumn('Updated', 'updatedOn');
+var updatedByColumn = personColumn('Updated by', 'updatedBy');
+
+var deadlineColumn = dateColumn('Deadline', 'deadline');
 
 var tagsColumn = {
   sTitle: 'Tags',
@@ -320,8 +282,6 @@ var titleColumn = {
   bFilter: true
 };
 
-/*traveler columns*/
-
 var travelerLinkColumn = {
   sTitle: '',
   mData: function (source, type, val) {
@@ -333,6 +293,10 @@ var travelerLinkColumn = {
     }
     return 'unknown';
   },
+  // mData: '_id',
+  // mRender: function(data, type, full) {
+  //   return '<a href="/travelers/' + data + '/" target="_blank" data-toggle="tooltip" title="go to the traveler"><i class="fa fa-edit fa-lg"></i></a>';
+  // },
   bSortable: false
 };
 
@@ -431,69 +395,6 @@ var statusColumn = {
   bFilter: true
 };
 
-/*router columns*/
-var routerConfigLinkColumn = {
-  sTitle: '',
-  mData: '_id',
-  mRender: function (data, type, full) {
-    return '<a href="/routers/' + data + '/config" target="_blank" data-toggle="tooltip" title="config the router"><i class="fa fa-gear fa-lg"></i></a>';
-  },
-  bSortable: false
-};
-
-var routerShareLinkColumn = {
-  sTitle: '',
-  mData: '_id',
-  mRender: function (data, type, full) {
-    return '<a href="/routers/' + data + '/share/" target="_blank" data-toggle="tooltip" title="share the router"><i class="fa fa-users fa-lg"></i></a>';
-  },
-  bSortable: false
-};
-
-var routerLinkColumn = {
-  sTitle: '',
-  mData: '_id',
-  mRender: function (data, type, full) {
-    return '<a href="/routers/' + data + '/" target="_blank" data-toggle="tooltip" title="go to the router"><i class="fa fa-edit fa-lg"></i></a>';
-  },
-  bSortable: false
-};
-
-var routerStatusColumn = {
-  sTitle: 'Status',
-  mData: 'status',
-  mRender: function (data, type, full) {
-    return formatRouterStatus(data);
-  },
-  bFilter: true
-};
-
-var routerProgressColumn = {
-  sTitle: 'Progress',
-  bSortable: true,
-  sType: 'numeric',
-  mData: function (source, type, val) {
-    if (!source.hasOwnProperty('tasks') || source.tasks.length === 0) {
-      if (type === 'sort') {
-        return 0;
-      }
-      return '';
-    }
-    if (!source.hasOwnProperty('finishedTasks')) {
-      if (type === 'sort') {
-        return 0;
-      }
-      return 'unknown';
-    }
-    var percentage = Math.floor((source.finishedTasks.length / source.tasks.length) * 100);
-    if (type === 'sort') {
-      return percentage;
-    }
-    return '<div class="progress" style="margin-bottom: 0; width: 100px; background: #FFFF00; position: relative;"><div class="bar" style="width:' + percentage + '%;"></div><span style="position: absolute; text-align: center; width: 100%; z-index: 100; color: #000000; display: block;">' + source.finishedTasks.length + '/' + source.tasks.length + '</span></div>';
-  }
-};
-
-
 /*shared user columns*/
 var useridColumn = personColumn('User id', '_id');
 
@@ -571,3 +472,97 @@ var typeColumn = {
   sDefaultContent: '',
   bFilter: true
 };
+
+var descriptionColumn = {
+  sTitle: 'Description',
+  mData: 'description',
+  sDefaultContent: '',
+  bFilter: true
+};
+
+var modifiedOnColumn = dateColumn('Modified', 'dateModified');
+
+var modifiedByColumn = {
+  sTitle: 'Modified by',
+  mData: 'modifiedBy',
+  sDefaultContent: '',
+  bFilter: true
+};
+
+/*router columns*/
+var routerConfigLinkColumn = {
+  sTitle: '',
+  mData: '_id',
+  mRender: function (data, type, full) {
+    return '<a href="/routers/' + data + '/config" target="_blank" data-toggle="tooltip" title="config the router"><i class="fa fa-gear fa-lg"></i></a>';
+  },
+  bSortable: false
+};
+
+var routerShareLinkColumn = {
+  sTitle: '',
+  mData: '_id',
+  mRender: function (data, type, full) {
+    return '<a href="/routers/' + data + '/share/" target="_blank" data-toggle="tooltip" title="share the router"><i class="fa fa-users fa-lg"></i></a>';
+  },
+  bSortable: false
+};
+
+var routerLinkColumn = {
+  sTitle: '',
+  mData: '_id',
+  mRender: function (data, type, full) {
+    return '<a href="/routers/' + data + '/" target="_blank" data-toggle="tooltip" title="go to the router"><i class="fa fa-edit fa-lg"></i></a>';
+  },
+  bSortable: false
+};
+
+var routerStatusColumn = {
+  sTitle: 'Status',
+  mData: 'status',
+  mRender: function (data, type, full) {
+    return formatRouterStatus(data);
+  },
+  bFilter: true
+};
+
+var routerProgressColumn = {
+  sTitle: 'Progress',
+  bSortable: true,
+  sType: 'numeric',
+  mData: function (source, type, val) {
+    if (!source.hasOwnProperty('tasks') || source.tasks.length === 0) {
+      if (type === 'sort') {
+        return 0;
+      }
+      return '';
+    }
+    if (!source.hasOwnProperty('finishedTasks')) {
+      if (type === 'sort') {
+        return 0;
+      }
+      return 'unknown';
+    }
+    var percentage = Math.floor((source.finishedTasks.length / source.tasks.length) * 100);
+    if (type === 'sort') {
+      return percentage;
+    }
+    return '<div class="progress" style="margin-bottom: 0; width: 100px; background: #FFFF00; position: relative;"><div class="bar" style="width:' + percentage + '%;"></div><span style="position: absolute; text-align: center; width: 100%; z-index: 100; color: #000000; display: block;">' + source.finishedTasks.length + '/' + source.tasks.length + '</span></div>';
+  }
+};
+
+/*common table elements*/
+
+var oTableTools = {
+  "sSwfPath": "/datatables/swf/copy_csv_xls_pdf.swf",
+  "aButtons": [
+    "copy",
+    "print", {
+      "sExtends": "collection",
+      "sButtonText": 'Save <span class="caret" />',
+      "aButtons": ["csv", "xls", "pdf"]
+    }
+  ]
+};
+
+var sDom = "<'row-fluid'<'span6'<'control-group'T>>><'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>";
