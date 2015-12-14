@@ -1,0 +1,52 @@
+/*!
+ * Bootstrap Docs (http://getbootstrap.com)
+ * Copyright 2011-2015 Twitter, Inc.
+ * Licensed under the Creative Commons Attribution 3.0 Unported License. For
+ * details, see https://creativecommons.org/licenses/by/3.0/.
+ */
+
+body {
+    position: relative
+}
+
+.sidebar.affix {
+    position: static
+}
+
+@media (min-width:768px) {
+    .sidebar {
+        padding-left: 20px
+    }
+}
+
+.sidenav {
+    margin-top: 20px;
+    margin-bottom: 20px
+}
+
+@media (min-width:992px) {
+    .sidebar .nav>.active>ul {
+        display: block
+    }
+    .sidebar.affix, .sidebar.affix-bottom {
+        width: 213px
+    }
+    .sidebar.affix {
+        position: fixed;
+        top: 20px
+    }
+    .sidebar.affix-bottom {
+        position: absolute
+    }
+    .sidebar.affix .sidenav, .sidebar.affix-bottom .sidenav {
+        margin-top: 0;
+        margin-bottom: 0
+    }
+}
+
+@media (min-width:1200px) {
+    .sidebar.affix, .sidebar.affix-bottom {
+        width: 263px
+    }
+}
+
